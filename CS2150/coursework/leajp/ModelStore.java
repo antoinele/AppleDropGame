@@ -246,6 +246,8 @@ public class ModelStore {
 		{
 			if(!rp.loaded)
 			{
+				System.err.println(String.format("Loading model \"%s\"", name));
+				
 				try {
 					rp.load(++lastListID);
 					

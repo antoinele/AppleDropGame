@@ -43,7 +43,7 @@ public class World implements Renderable {
 		GL11.glPushMatrix();
 			
 			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-//			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_LIGHTING);
 			
 			// how shiny are the front faces of the roof (specular exponent)
             float groundShininess = 2.0f;

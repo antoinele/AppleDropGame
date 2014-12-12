@@ -4,18 +4,26 @@
  * Scene Graph:
  *  Scene origin
  *  |
+ *  +-- world
+ *  |   |
+ *  |   +-- barn
+ *  |   |
+ *  |   +-- windmill
+ *  |       |
+ *  |       +-- windmillpivot
+ *  |           |
+ *  |           +-- windmillpropeller
+ *  |
+ *  +-- skybox 
  *
  *  TODO: Provide a scene graph for your submission
  */
 package coursework.leajp;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.input.Keyboard;
-
 import coursework.leajp.AppleDropGame.FallingApple;
+import coursework.leajp.models.Skybox;
 import GraphicsLab.*;
 
 /**
@@ -37,9 +45,12 @@ public class CS2150Coursework extends GraphicsLab
 
 	private final float usableWidth = 2 * 9f;
 	
+	private Camera camera = null;
+	
 	private Renderable apple;
 	private Renderable basket;
 	private Renderable world;
+	private Skybox skybox;
 	
 	private FPSCounter fpsCounter;
 	
@@ -80,6 +91,11 @@ public class CS2150Coursework extends GraphicsLab
     	fpsCounter.init();
     	
     	world  = ModelStore.getModel("world");
+    	skybox = (Skybox)ModelStore.getModel("skybox");
+
+    	camera = new Camera(usableWidth);
+    	
+    	skybox.setCamera(camera);
     	
     	apple  = ModelStore.getModel("apple");
     	basket = ModelStore.getModel("basket");
@@ -105,6 +121,8 @@ public class CS2150Coursework extends GraphicsLab
      //      It will probably call a number of other methods you will write.
     	fpsCounter.count();
     	
+    	skybox.draw();
+    	
     	GL11.glPushMatrix();
     	{
     		GL11.glTranslatef(0f, 0f, -2f);
@@ -121,8 +139,6 @@ public class CS2150Coursework extends GraphicsLab
     private void drawBasket() {
 
     	float basketPos = usableWidth * (game.getBasketPos() / game.gameWidth) - (usableWidth/2);
-    	
-//    	System.out.println(String.format("Basket Pos: %f", basketPos));
     	
 		GL11.glPushMatrix();
 		{
@@ -164,18 +180,15 @@ public class CS2150Coursework extends GraphicsLab
         // call the default behaviour defined in GraphicsLab. This will set a default perspective projection
         // and default camera settings ready for some custom camera positioning below...  
         super.setSceneCamera();
-
-        //TODO: If it is appropriate for your scene, modify the camera's position and orientation here
-        //        using a call to GL11.gluLookAt(...)
         
-		// Orbit camera around object
-//		float x = (float) (50 * Math.cos(0) * Math.sin(coneSpin)),
-//		      y = (float) (50 * Math.cos(coneSpin)),
-//		      z = (float) (50 * Math.sin(0) * Math.sin(coneSpin));
-//		
-//		GLU.gluLookAt(x, y, z, 0, 0, 0, 0, 0, 1);
-		GLU.gluLookAt(18, 0, 3, 0, 0, 3, 0, 0, 1); // Set Z to be the up axis, it's easier like that
-    	
+        if(camera != null)
+        	camera.update();
+        
+//        float targetY = (Mouse.getX() / (float)displayMode.getWidth()) - 0.5f;
+//        
+//        targetY *= usableWidth;
+//        
+//		GLU.gluLookAt(18, 0, 3, 0, targetY, 3, 0, 0, 1); // Set Z to be the up axis, it's easier like that    	
    }
 
     protected void cleanupScene()

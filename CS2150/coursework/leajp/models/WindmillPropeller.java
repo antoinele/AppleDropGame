@@ -14,8 +14,7 @@ public class WindmillPropeller implements Renderable {
 	private int list;
 	
 	public String getName() {
-		// TODO Auto-generated method stub
-		return "propeller";
+		return "windmillpropeller";
 	}
 
 	public void load(int id) throws Exception {

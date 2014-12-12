@@ -22,7 +22,7 @@ public class AppleDropGame {
 	public final float appleWidth = 2f;
 	public final float appleHeight = 2f;
 	
-	public final float basketWidth = 60f;
+	public final float basketWidth = 70f;
 	public final float basketHeight = 6f;
 	
 	public final float basketBoundary = 10f;

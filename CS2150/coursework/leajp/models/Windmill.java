@@ -26,7 +26,7 @@ public class Windmill implements Renderable {
 		
 		windmillTexture = Helpers.loadTexture("source_models/windmill_texture.png", "png");
 		
-		propeller = ModelStore.getModel("propeller");
+		propeller = ModelStore.getModel("windmillpropeller");
 		pivot     = ModelStore.getModel("windmillpivot");
 		
 		GL11.glNewList(list, GL11.GL_COMPILE);
@@ -799,36 +799,31 @@ public class Windmill implements Renderable {
 		GL11.glEndList();
 	}
 
-//	int ang = 0;
-	
 	public void draw() {
 		GL11.glCallList(list);
+	
+		GL11.glPushMatrix();
 		
-		{
-			GL11.glPushMatrix();
-			
+		{	// Draw the pivot
 			float angle = (float) Math.sin(System.nanoTime() / (2 * 1000000000f)) * 20f;
-			
 			float pivotoffset = -0.7f;
-
-			System.out.println(angle);
-			
+	
 			GL11.glTranslatef(0f, -pivotoffset, 0f);
 			GL11.glRotatef(angle, 0f, 0f, 1f);
 			GL11.glTranslatef(0f, pivotoffset, 0f);
 			
 			pivot.draw();
-			
+		}
+		
+		{	// Draw propeller - the propeller rotates itself
 			GL11.glTranslatef(0f, 0.8f, 1.46f);
 			GL11.glScalef(0.3f, 0.3f, 0.3f);
 			GL11.glRotatef(90f, 1f, 0f, 0f);
-
-//			GL11.glRotatef(ang += 5, 0f, 0f, 1f);
 			
 			propeller.draw();
-			
-			GL11.glPopMatrix();
 		}
+		
+		GL11.glPopMatrix();
 	}
 
 }
