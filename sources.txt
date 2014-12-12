@@ -1,4 +1,5 @@
-all models: me
+all models: made by me
 grass-texture-2.jpg: http://mirror2.cze.cz/texturesLarge/grass-texture-2.jpg
 windmill propeller texture: http://skipgo.deviantart.com/art/cool-metal-texture-83445678
 DroidSansMono font: Google
+samplefont.gif: http://realmike.org/blog/articles/fast-bitmap-fonts-for-directdraw/

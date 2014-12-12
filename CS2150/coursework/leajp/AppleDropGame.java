@@ -27,7 +27,7 @@ public class AppleDropGame {
 	
 	public final float basketBoundary = 10f;
 	
-	private long score = 0; // using a long for the score is way too optimistic
+	private int score = 0;
 	private int lives = 5;
 	
 	private float basketPos = 0;
@@ -39,22 +39,48 @@ public class AppleDropGame {
 	
 	public class FallingApple
 	{
-		public final float fallRate = 30f; // units/s
+		public final float baseFallRate = 60f;
+		public final float maxSpinRate = 50f;
+		public final float minSpinRate = 20f;
 		
 		public float x;
 		public float y;
 		
+		public float rx;
+		public float ry;
+		public float rz;
+		
+		public float angle;
+		
+		public float spinRate;
+		
 		public boolean dropped = false;
+		
+		public float fallRate()
+		{
+			return baseFallRate * ( score / 1000 ) + baseFallRate;
+		}
 		
 		public FallingApple()
 		{
 			x = rng.nextInt((int)((gameWidth - (2*basketBoundary))/50)) * 50 + basketBoundary;
 			y = gameHeight * 1.1f; // start just above the top of the screen
+			
+			x += rng.nextFloat() * 30f - 15f; 
+			
+			rx = rng.nextFloat();
+			ry = rng.nextFloat();
+			rz = rng.nextFloat();
+			
+			spinRate = (rng.nextFloat() * (maxSpinRate - minSpinRate)) + minSpinRate;
+			
+			angle = rng.nextFloat() * 1000f;
 		}
 		
 		public void fall()
 		{
-			y -= fallRate * (timeDelta / 1000f);
+			y -= fallRate() * (timeDelta / 1000f);
+			angle += spinRate * (timeDelta / 1000f);
 		}
 	}
 	
@@ -78,7 +104,8 @@ public class AppleDropGame {
 	{
 		if((time / 1000) != lastDrop)
 		{
-			spawnApple();
+			if(rng.nextBoolean())
+				spawnApple();
 			
 			lastDrop = time / 1000;
 		}
@@ -149,10 +176,19 @@ public class AppleDropGame {
 		timeDelta = newtime - time;
 		time = newtime;
 		
+		int prevscore = score;
+		int prevlives = lives;
+		
 		handleSpawn();
 		handleGravity();
 		handleCatch();
 		handleDropped();
+		
+		if(prevscore != score)
+			System.out.println(String.format("Score: %1$d", score));
+		
+		if(prevlives != lives)
+			System.out.println(String.format("Lives: %1$d", lives));
 	}
 	
 	public long getScore()

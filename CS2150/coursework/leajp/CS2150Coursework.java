@@ -22,13 +22,13 @@ package coursework.leajp;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Mouse;
+
 import coursework.leajp.AppleDropGame.FallingApple;
 import coursework.leajp.models.Skybox;
+import fcampos.rawengine3D.font.BitmapFont;
 import GraphicsLab.*;
 
 /**
- * TODO: Briefly describe your submission here
- *
  * <p>Controls:
  * <ul>
  * <li>Press the escape key to exit the application.
@@ -36,8 +36,6 @@ import GraphicsLab.*;
  * <li>While viewing the scene along the x, y or z axis, use the up and down cursor keys
  *      to increase or decrease the viewpoint's distance from the scene origin
  * </ul>
- * TODO: Add any additional controls for your sample to the list above
- *
  */
 public class CS2150Coursework extends GraphicsLab
 {
@@ -54,19 +52,19 @@ public class CS2150Coursework extends GraphicsLab
 	
 	private FPSCounter fpsCounter;
 	
+	private BitmapFont font;
+	
 	public CS2150Coursework()
 	{
-		fpsCounter = new FPSCounter();
+
 	}
 	
-    //TODO: Feel free to change the window title and default animation scale here
     public static void main(String args[])
     {   new CS2150Coursework().run(WINDOWED,"Apple Drop Game",0.01f);
     }
 
     protected void initScene() throws Exception
-    {//TODO: Initialise your resources here - might well call other methods you write.
-
+    {
     	float globalAmbient[] = {0.6f, 0.6f, 0.6f, 1f};
     	GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, FloatBuffer.wrap(globalAmbient));
     	
@@ -87,6 +85,14 @@ public class CS2150Coursework extends GraphicsLab
     	GL11.glEnable(GL11.GL_LIGHTING);
     	GL11.glEnable(GL11.GL_NORMALIZE);
     	GL11.glShadeModel(GL11.GL_SMOOTH);
+    	
+		try {
+			font = new BitmapFont(Helpers.loadTexture("source_models/samplefont.gif", "GIF"), 16, 16);
+			fpsCounter = new FPSCounter(font);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
     	
     	fpsCounter.init();
     	
@@ -111,14 +117,10 @@ public class CS2150Coursework extends GraphicsLab
     
     protected void updateScene()
     {
-        //TODO: Update your scene variables here - remember to use the current animation scale value
-        //        (obtained via a call to getAnimationScale()) in your modifications so that your animations
-        //        can be made faster or slower depending on the machine you are working on
     	game.update();
     }
     protected void renderScene()
-    {//TODO: Render your scene here - remember that a scene graph will help you write this method! 
-     //      It will probably call a number of other methods you will write.
+    {
     	fpsCounter.count();
     	
     	skybox.draw();
@@ -133,8 +135,9 @@ public class CS2150Coursework extends GraphicsLab
     	drawApples();
     	
     	drawBasket();
+
+		fpsCounter.draw();
     	
-//		fpsCounter.draw();
     }
     private void drawBasket() {
 
@@ -168,6 +171,8 @@ public class CS2150Coursework extends GraphicsLab
 		    	
 		    	GL11.glScalef(0.25f, 0.25f, 0.25f);
 		    	
+		    	GL11.glRotatef(fa.angle, fa.rx, fa.ry, fa.rz);
+		    	
 		    	apple.draw();
 	    	}
 			GL11.glPopMatrix();
@@ -182,17 +187,11 @@ public class CS2150Coursework extends GraphicsLab
         super.setSceneCamera();
         
         if(camera != null)
-        	camera.update();
-        
-//        float targetY = (Mouse.getX() / (float)displayMode.getWidth()) - 0.5f;
-//        
-//        targetY *= usableWidth;
-//        
-//		GLU.gluLookAt(18, 0, 3, 0, targetY, 3, 0, 0, 1); // Set Z to be the up axis, it's easier like that    	
+        	camera.update();    	
    }
 
     protected void cleanupScene()
-    {//TODO: Clean up your resources here
+    {
     }
 
 }

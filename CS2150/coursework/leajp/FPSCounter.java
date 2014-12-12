@@ -1,14 +1,13 @@
 package coursework.leajp;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
+
+import fcampos.rawengine3D.font.BitmapFont;
 
 public class FPSCounter {
 	private final int SAMPLE_LENGTH = 5;
@@ -17,11 +16,16 @@ public class FPSCounter {
 	
 	private boolean shouldPrint = false;
 	
-	@SuppressWarnings("deprecation")
-	private TrueTypeFont font;
+	private BitmapFont font;
 	
-	public FPSCounter()
+	public FPSCounter(BitmapFont font)
 	{
+		this.font = font;
+		
+		for(int i=0; i<SAMPLE_LENGTH; i++)
+		{
+			counts[i] = 0;
+		}
 	}
 	
 	public final void count()
@@ -68,29 +72,51 @@ public class FPSCounter {
 	
 	public final void init()
 	{
-		InputStream is = ResourceLoader.getResourceAsStream("source_models/DroidSansMono.ttf");
 		
-		Font awtfont;
-		try {
-			awtfont = Font.createFont(Font.TRUETYPE_FONT, is);
-			awtfont.deriveFont(24f);
-			font = new TrueTypeFont(awtfont, false);
-		} catch (FontFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
+	
+	private long lastprint = 0;
 	
 	public final void draw()
 	{
+		long time = System.nanoTime() / 1000000000;
+		
+		if(time != lastprint)
+		{
+			System.err.println(String.format("FPS: %1$f", fps()));
+			lastprint = time;
+		}
+		
+//		GL11.glDisable(GL11.GL_DEPTH_TEST);
+//		GL11.glDepthMask(false);
+//		
 //		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 //		GL11.glDisable(GL11.GL_LIGHTING);
-//		Color.white.bind();
-//		font.drawString(0, 0, String.format("FPS: %f\n", fps()), Color.yellow);
+		
+//		GL11.glPushMatrix();
 //		
+//		GL11.glLoadIdentity();
+//		
+//		GL11.glEnable(GL11.GL_TEXTURE_2D);     
+//        GL11.glDisable(GL11.GL_DEPTH_TEST);
+//        GL11.glDisable(GL11.GL_LIGHTING);                   
+//  
+//        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);               
+//        GL11.glClearDepth(1);                                      
+//  
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//		
+//		Color.white.bind();
+//		font.drawString(0, String.format("FPS: %f\n", fps()), 10, 10);
+		
 //		GL11.glPopAttrib();
+//		
+//		GL11.glDepthMask(true);
+//		GL11.glEnable(GL11.GL_LIGHTING);
+//		GL11.glEnable(GL11.GL_DEPTH_TEST);
+//		GL11.glDisable(GL11.GL_TEXTURE_2D);
+//		
+//		GL11.glPopMatrix();
 	}
 }
