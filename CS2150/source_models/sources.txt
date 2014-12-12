@@ -1,0 +1,3 @@
+apple and barn models: me
+grass-texture-2.jpg: http://mirror2.cze.cz/texturesLarge/grass-texture-2.jpg
+windmill propeller texture: http://skipgo.deviantart.com/art/cool-metal-texture-83445678
